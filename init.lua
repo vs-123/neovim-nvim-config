@@ -143,6 +143,7 @@ require("nvim-tree").setup({
       vim.keymap.set("n", "c", api.fs.copy.node, opts)           -- copy
       vim.keymap.set("n", "p", api.fs.paste, opts)               -- paste
       vim.keymap.set("n", "y", api.fs.copy.filename, opts)       -- copy filename
+      vim.keymap.set("n", "t", api.node.open.tab, opts)          -- open in new tab
    end
 })
 
