@@ -138,7 +138,6 @@ require("nvim-tree").setup({
 ------------------------------------------------------------
 -- LSP
 ------------------------------------------------------------
-local lspconfig = require("lspconfig")
 local lsp_util = require("lspconfig.util")
 
 local function show_all_signatures()
@@ -176,11 +175,11 @@ local on_attach = function(client, bufnr)
    vim.keymap.set("i", "<C-s>", show_all_signatures, { silent = true })
 end
 
-lspconfig.clangd.setup {
+require("lspconfig").clangd.setup {
    on_attach = on_attach,
    cmd = { "clangd", "--compile-commands-dir=build" },
    filetypes = { "c", "cpp", "objc", "objcpp" },
-   root_dir = lspconfig.util.root_pattern("compile_commands.json", ".git"),
+   root_dir = require("lspconfig.util").root_pattern("compile_commands.json", ".git"),
 }
 
 vim.diagnostic.config({
