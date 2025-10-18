@@ -112,7 +112,8 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
    { "nvim-tree/nvim-tree.lua", dependencies = { "nvim-tree/nvim-web-devicons" } },
    { "neovim/nvim-lspconfig" },
-   { "folke/neodev.nvim" }
+   { "folke/neodev.nvim" },
+   { "tpope/vim-surround" }
    -- { "Issafalcon/lsp_signature.nvim", lazy = true }
 })
 
@@ -130,8 +131,8 @@ require("nvim-tree").setup({
 		local api = require("nvim-tree.api")
 		local opts = { noremap = true, silent = true, buffer = bufnr }
 
-      vim.keymap.set("n", "v", api.node.open.vertical, opts)
-      vim.keymap.set("n", "s", api.node.open.horizontal, opts)
+      vim.keymap.set("n", "v", api.node.open.vertical, opts)     -- vertical split
+      vim.keymap.set("n", "s", api.node.open.horizontal, opts)   -- horizontal split
       vim.keymap.set("n", "a", api.fs.create, opts)              -- create new file or folder
       vim.keymap.set("n", "d", api.fs.remove, opts)              -- delete
       vim.keymap.set("n", "r", api.fs.rename, opts)              -- rename
