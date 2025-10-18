@@ -129,11 +129,15 @@ require("nvim-tree").setup({
 		local api = require("nvim-tree.api")
 		local opts = { noremap = true, silent = true, buffer = bufnr }
 
-		-- Restore vertical split keybinding
-		vim.keymap.set("n", "v", api.node.open.vertical, opts)
-
-		-- Optional: also restore horizontal split
-		vim.keymap.set("n", "s", api.node.open.horizontal, opts)
+      vim.keymap.set("n", "v", api.node.open.vertical, opts)
+      vim.keymap.set("n", "s", api.node.open.horizontal, opts)
+      vim.keymap.set("n", "a", api.fs.create, opts)              -- create new file or folder
+      vim.keymap.set("n", "d", api.fs.remove, opts)              -- delete
+      vim.keymap.set("n", "r", api.fs.rename, opts)              -- rename
+      vim.keymap.set("n", "x", api.fs.cut, opts)                 -- cut
+      vim.keymap.set("n", "c", api.fs.copy.node, opts)           -- copy
+      vim.keymap.set("n", "p", api.fs.paste, opts)               -- paste
+      vim.keymap.set("n", "y", api.fs.copy.filename, opts)       -- copy filename
    end
 })
 
