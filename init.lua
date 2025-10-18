@@ -138,12 +138,12 @@ require("nvim-tree").setup({
 ------------------------------------------------------------
 -- LSP
 ------------------------------------------------------------
-local lspconfig = require("lspconfig")
+local lsp_util = require("lspconfig.util")
 
 local function show_all_signatures()
    local clients = vim.lsp.get_active_clients({ bufnr = 0 })
    local encoding = clients[1] and clients[1].offset_encoding or "utf-16"
-   local params = vim.lsp.util.make_position_params(0, encoding)
+   local params = lsp_util.make_position_params(0, encoding)
 
    vim.lsp.buf_request(0, "textDocument/signatureHelp", params, function(err, result, ctx, config)
       if err or not result or not result.signatures then return end
@@ -158,7 +158,7 @@ local function show_all_signatures()
          table.insert(lines, label)
       end
 
-      vim.lsp.util.open_floating_preview(lines, "lua", { border = "rounded" })
+      lsp_util.open_floating_preview(lines, "lua", { border = "rounded" })
    end)
 end
 
@@ -175,11 +175,11 @@ local on_attach = function(client, bufnr)
    vim.keymap.set("i", "<C-s>", show_all_signatures, { silent = true })
 end
 
-lspconfig.clangd.setup {
+require("lspconfig").clangd.setup {
    on_attach = on_attach,
    cmd = { "clangd", "--compile-commands-dir=build" },
    filetypes = { "c", "cpp", "objc", "objcpp" },
-   root_dir = lspconfig.util.root_pattern("compile_commands.json", ".git"),
+   root_dir = require("lspconfig.util").root_pattern("compile_commands.json", ".git"),
 }
 
 vim.diagnostic.config({
