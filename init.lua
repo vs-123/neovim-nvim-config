@@ -79,8 +79,8 @@ vim.keymap.set("n", "<leader>q", ":tabclose<CR>", { noremap = true, silent = tru
 vim.keymap.set("n", "<leader>t", ":term<CR>", { noremap = true, silent = true })
 vim.keymap.set("t", "<esc>", "<C-\\><C-n>", { noremap = true, silent = true })
 
-vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>E", ":NvimTreeToggle %:h<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>e", ":NERDTreeToggle<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>E", ":NERDTreeToggle %:h<CR>", { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>p", TogglePaste, { noremap = true, silent = true })
 
@@ -113,38 +113,11 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-   { "nvim-tree/nvim-tree.lua", dependencies = { "nvim-tree/nvim-web-devicons" } },
+   { "preservim/nerdtree" },
    { "neovim/nvim-lspconfig" },
    { "folke/neodev.nvim" },
    { "tpope/vim-surround" }
    -- { "Issafalcon/lsp_signature.nvim", lazy = true }
-})
-
-------------------------------------------------------------
--- File Tree
-------------------------------------------------------------
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-
-require("nvim-tree").setup({
-   view = { width = 30, side = "left" },
-   filters = { dotfiles = false },
-   renderer = { group_empty = true },
-   on_attach = function(bufnr)
-		local api = require("nvim-tree.api")
-		local opts = { noremap = true, silent = true, buffer = bufnr }
-
-      vim.keymap.set("n", "v", api.node.open.vertical, opts)     -- vertical split
-      vim.keymap.set("n", "s", api.node.open.horizontal, opts)   -- horizontal split
-      vim.keymap.set("n", "a", api.fs.create, opts)              -- create new file or folder
-      vim.keymap.set("n", "d", api.fs.remove, opts)              -- delete
-      vim.keymap.set("n", "r", api.fs.rename, opts)              -- rename
-      vim.keymap.set("n", "x", api.fs.cut, opts)                 -- cut
-      vim.keymap.set("n", "c", api.fs.copy.node, opts)           -- copy
-      vim.keymap.set("n", "p", api.fs.paste, opts)               -- paste
-      vim.keymap.set("n", "y", api.fs.copy.filename, opts)       -- copy filename
-      vim.keymap.set("n", "t", api.node.open.tab, opts)          -- open in new tab
-   end
 })
 
 ------------------------------------------------------------
