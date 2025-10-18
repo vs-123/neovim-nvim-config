@@ -76,6 +76,9 @@ vim.keymap.set("n", "<leader>H", ":tabm-1<CR>", { noremap = true, silent = true 
 vim.keymap.set("n", "<leader>L", ":tabm+1<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>q", ":tabclose<CR>", { noremap = true, silent = true })
 
+vim.keymap.set("n", "<leader>t", ":term<CR>", { noremap = true, silent = true })
+vim.keymap.set("t", "<esc>", "<C-\\><C-n>", { noremap = true, silent = true })
+
 vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>E", ":NvimTreeToggle %:h<CR>", { noremap = true, silent = true })
 
