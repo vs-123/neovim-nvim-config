@@ -112,6 +112,7 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
    { "nvim-tree/nvim-tree.lua", dependencies = { "nvim-tree/nvim-web-devicons" } },
    { "neovim/nvim-lspconfig" },
+   { "folke/neodev.nvim" }
    -- { "Issafalcon/lsp_signature.nvim", lazy = true }
 })
 
@@ -217,6 +218,7 @@ vim.diagnostic.config({
 ------------------------------------------------------------
 -- Lua LSP (for Neovim config only)
 ------------------------------------------------------------
+require("neodev").setup()
 
 -- Root detection: only treat my Neovim config dir as a project
 local function compute_lua_root(bufnr)
