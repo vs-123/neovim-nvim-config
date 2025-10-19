@@ -117,7 +117,8 @@ require("lazy").setup({
    { "preservim/nerdtree" },
    { "neovim/nvim-lspconfig" },
    { "folke/neodev.nvim" },
-   { "tpope/vim-surround" }
+   { "tpope/vim-surround" },
+   { "ray-x/lsp_signature.nvim" },
    -- { "Issafalcon/lsp_signature.nvim", lazy = true }
 })
 
@@ -125,25 +126,6 @@ require("lazy").setup({
 -- LSP
 ------------------------------------------------------------
 local lsp_util = require("lspconfig.util")
-
-local function show_all_signatures()
-   local clients = vim.lsp.get_active_clients({ bufnr = 0 })
-   local encoding = clients[1] and clients[1].offset_encoding or "utf-16"
-   local params = lsp_util.make_position_params(0, encoding)
-
-   vim.lsp.buf_request(0, "textDocument/signatureHelp", params, function(err, result)
-      if err or not result or not result.signatures then return end
-      local lines = {}
-      for i, sig in ipairs(result.signatures) do
-         local label = sig.label
-         if result.activeSignature == i - 1 then
-            label = "▶ " .. label
-         end
-         table.insert(lines, label)
-      end
-      lsp_util.open_floating_preview(lines, "lua", { border = "rounded" })
-   end)
-end
 
 local on_attach = function(client, bufnr)
    local opts = { buffer = bufnr, silent = true }
@@ -154,7 +136,14 @@ local on_attach = function(client, bufnr)
    vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, opts)
    vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, opts)
    vim.keymap.set("n", "<leader>d", vim.diagnostic.setloclist, opts)
-   vim.keymap.set("i", "<C-s>", show_all_signatures, { silent = true })
+   -- vim.keymap.del("i", "<C-s>")
+   pcall(vim.keymap.del, "i", "<C-s>")
+   require("lsp_signature").setup({
+      bind = true,
+      floating_window = false,
+      hint_enable = false,
+      toggle_key = "<C-s>"
+   })
 end
 
 -- My root detection
