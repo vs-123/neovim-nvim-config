@@ -80,6 +80,7 @@ vim.keymap.set("n", "<leader>t", ":term<CR>", { noremap = true, silent = true })
 vim.keymap.set("t", "<esc>", "<C-\\><C-n>", { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>e", ":NERDTreeToggle<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>r", ":NERDTreeMirror<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>E", ":NERDTreeToggle %:h<CR>", { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>p", TogglePaste, { noremap = true, silent = true })
@@ -101,19 +102,6 @@ end
 -- -- :lua Center_banner("Your centered message")
 
 ------------------------------------------------------------
--- NERDTree Config
-------------------------------------------------------------
--- " Open the existing NERDTree on each new tab.
--- autocmd BufWinEnter * if &buftype != 'quickfix' && getcmdwintype() == '' | silent NERDTreeMirror | endif
-vim.api.nvim_create_autocmd("BufWinEnter", {
-   callback = function()
-      if vim.bo.buftype ~= "quickfix" and vim.fn.getcmdwintype() == "" then
-         vim.cmd("silent NERDTreeMirror")
-      end
-   end
-})
-
-------------------------------------------------------------
 -- Plugins
 ------------------------------------------------------------
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -131,19 +119,6 @@ require("lazy").setup({
    { "folke/neodev.nvim" },
    { "tpope/vim-surround" }
    -- { "Issafalcon/lsp_signature.nvim", lazy = true }
-})
-
-------------------------------------------------------------
--- NERDTree
-------------------------------------------------------------
--- autocmd BufWinEnter * if &buftype != 'quickfix' && getcmdwintype() == '' | silent NERDTreeMirror | endif
-
-vim.api.nvim_create_autocmd("BufWinEnter", {
-   callback = function(buftype)
-      if buftype ~= 'quickfix' and vim.fn.getcmdwintype() == '' then
-         vim.cmd("silent NERDTreeMirror")
-      end
-   end
 })
 
 ------------------------------------------------------------
