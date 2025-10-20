@@ -125,7 +125,15 @@ require("lazy").setup({
    },
    { "theHamsta/nvim-dap-virtual-text", 
      dependencies = { "mfussenegger/nvim-dap" },
-   }
+   },
+   { "nvim-lua/plenary.nvim" },
+   { "Civitasv/cmake-tools.nvim",
+      dependencies = {
+         "nvim-lua/plenary.nvim",
+         "mfussenegger/nvim-dap",
+      },
+   },
+   { "folke/which-key.nvim" },
    -- { "Issafalcon/lsp_signature.nvim", lazy = true }
 })
 
@@ -263,15 +271,6 @@ dap.configurations.cpp = {
    },
 }
 
-vim.keymap.set("n", "<F5>", function() dap.continue() end)
-vim.keymap.set("n", "<F10>", function() dap.step_over() end)
-vim.keymap.set("n", "<F11>", function() dap.step_into() end)
-vim.keymap.set("n", "<F12>", function() dap.step_out() end)
-vim.keymap.set("n", "<leader>b", function() dap.toggle_breakpoint() end)
-vim.keymap.set("n", "<leader>B", function()
-   dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
-end)
-
 local dapui = require("dapui")
 dapui.setup()
 
@@ -286,3 +285,43 @@ dap.listeners.before.event_exited["dapui_config"] = function()
 end
 
 require("nvim-dap-virtual-text").setup()
+
+------------------------------------------------------------
+-- cmake-tools
+------------------------------------------------------------
+
+require("cmake-tools").setup {
+   cmake_command = "cmake",
+   cmake_build_directory = "build",
+   -- always export compile_commands.json
+   cmake_generate_options = { "-DCMAKE_EXPORT_COMPILE_COMMANDS=1" },
+   cmake_build_options = {},
+   cmake_console_size = 10,
+   cmake_show_console = "always", -- "always", "only_on_error"
+   cmake_dap_configuration = {
+      name = "Launch with LLDB",
+      type = "lldb",
+      request = "launch",
+      stopOnEntry = false,
+      runInTerminal = false,
+   },
+}
+
+------------------------------------------------------------
+-- which-key (Keybinds)
+------------------------------------------------------------
+local wk = require("which-key")
+wk.register({
+   d = {
+      name = "Debug (DAP)",
+      c = { "<cmd>lua require('dap').continue()<CR>", "Continue" },
+      b = { "<cmd>lua require('dap').toggle_breakpoint()<CR>", "Toggle Breakpoint" },
+      B = { "<cmd>lua require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>", "Breakpoint with Condition" },
+      o = { "<cmd>lua require('dap').step_over()<CR>", "Step Over" },
+      i = { "<cmd>lua require('dap').step_into()<CR>", "Step Into" },
+      O = { "<cmd>lua require('dap').step_out()<CR>", "Step Out" },
+      u = { "<cmd>lua require('dapui').toggle()<CR>", "Toggle DAP UI" },
+   },
+}, { prefix = "<leader>" })
+
+
