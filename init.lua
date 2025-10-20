@@ -119,6 +119,13 @@ require("lazy").setup({
    { "folke/neodev.nvim" },
    { "tpope/vim-surround" },
    { "ray-x/lsp_signature.nvim" },
+   { "mfussenegger/nvim-dap" },
+   { "rcarriga/nvim-dap-ui",
+      dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+   },
+   { "theHamsta/nvim-dap-virtual-text", 
+     dependencies = { "mfussenegger/nvim-dap" },
+   }
    -- { "Issafalcon/lsp_signature.nvim", lazy = true }
 })
 
@@ -231,3 +238,51 @@ vim.api.nvim_create_autocmd("FileType", {
    end,
 })
 
+------------------------------------------------------------
+-- DAP
+------------------------------------------------------------
+local dap = require("dap")
+
+dap.adapters.lldb = {
+   type = "executable",
+   command = "lldb-dap",
+   name = "lldb"
+}
+
+dap.configurations.cpp = {
+   {
+      name = "Launch with LLDB",
+      type = "lldb",
+      request = "launch",
+      program = function()
+         return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "\\", "file")
+      end,
+      cwd = "${workspaceFolder}",
+      stopOnEntry = false,
+      args = {},
+   },
+}
+
+vim.keymap.set("n", "<F5>", function() dap.continue() end)
+vim.keymap.set("n", "<F10>", function() dap.step_over() end)
+vim.keymap.set("n", "<F11>", function() dap.step_into() end)
+vim.keymap.set("n", "<F12>", function() dap.step_out() end)
+vim.keymap.set("n", "<leader>b", function() dap.toggle_breakpoint() end)
+vim.keymap.set("n", "<leader>B", function()
+   dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
+end)
+
+local dapui = require("dapui")
+dapui.setup()
+
+dap.listeners.after.event_initialized["dapui_config"] = function()
+   dapui.open()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+   dapui.close()
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+   dapui.close()
+end
+
+require("nvim-dap-virtual-text").setup()
