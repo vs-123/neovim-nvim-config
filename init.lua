@@ -311,17 +311,33 @@ require("cmake-tools").setup {
 -- which-key (Keybinds)
 ------------------------------------------------------------
 local wk = require("which-key")
-wk.register({
-   d = {
-      name = "Debug (DAP)",
-      c = { "<cmd>lua require('dap').continue()<CR>", "Continue" },
-      b = { "<cmd>lua require('dap').toggle_breakpoint()<CR>", "Toggle Breakpoint" },
-      B = { "<cmd>lua require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>", "Breakpoint with Condition" },
-      o = { "<cmd>lua require('dap').step_over()<CR>", "Step Over" },
-      i = { "<cmd>lua require('dap').step_into()<CR>", "Step Into" },
-      O = { "<cmd>lua require('dap').step_out()<CR>", "Step Out" },
-      u = { "<cmd>lua require('dapui').toggle()<CR>", "Toggle DAP UI" },
-   },
-}, { prefix = "<leader>" })
 
+require("which-key").setup({
+   win = {
+      border = "rounded",
+      title = true,
+      title_pos = "center",
+      zindex = 1000,
+      row = 1,
+      col = -1,
+      width = 40,
+      padding = { 1, 2 },
+   },
+   layout = {
+      align = "right",
+      spacing = 3,
+   },
+   delay = 0
+})
+
+wk.add({
+   { "<leader>d",  group = "Debug (DAP)" },
+   { "<leader>dc", "<cmd>lua require('dap').continue()<CR>", desc = "Continue" },
+   { "<leader>db", "<cmd>lua require('dap').toggle_breakpoint()<CR>", desc = "Toggle Breakpoint" },
+   { "<leader>dB", "<cmd>lua require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>", desc = "Breakpoint with Condition" },
+   { "<leader>do", "<cmd>lua require('dap').step_over()<CR>", desc = "Step Over" },
+   { "<leader>di", "<cmd>lua require('dap').step_into()<CR>", desc = "Step Into" },
+   { "<leader>dO", "<cmd>lua require('dap').step_out()<CR>", desc = "Step Out" },
+   { "<leader>du", "<cmd>lua require('dapui').toggle()<CR>", desc = "Toggle DAP UI" },
+})
 
