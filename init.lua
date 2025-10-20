@@ -47,6 +47,8 @@ vim.o.cursorline = true
 vim.o.wildmenu = true
 vim.o.incsearch = true
 vim.o.hlsearch = true
+vim.o.timeout = true
+vim.o.timeoutlen = 0
 vim.o.belloff = "all"
 
 vim.o.completeopt = "menuone,noinsert,noselect"
