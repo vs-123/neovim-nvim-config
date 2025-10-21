@@ -81,6 +81,8 @@ vim.keymap.set("n", "<leader>q", ":tabclose<CR>", { noremap = true, silent = tru
 vim.keymap.set("n", "<leader>t", ":term<CR>", { noremap = true, silent = true, desc = "Open terminal" })
 vim.keymap.set("t", "<esc>", "<C-\\><C-n>", { noremap = true, silent = true, desc = "Normal mode in terminal" })
 
+-- NERDTree
+vim.g.NERDTreeShowHidden = 1
 vim.keymap.set("n", "<leader>e", ":NERDTreeToggle<CR>", { noremap = true, silent = true, desc = "Toggle NERDTree" })
 vim.keymap.set("n", "<leader>r", ":NERDTreeMirror<CR>", { noremap = true, silent = true, desc = "Mirror NERDTree" })
 vim.keymap.set("n", "<leader>E", ":NERDTreeToggle %:h<CR>", { noremap = true, silent = true, desc = "Toggle NERDTree for a file's location" })
@@ -213,7 +215,7 @@ end
 -- Base clangd client config
 local clangd_base = {
    name = "clangd",
-   cmd = { "clangd", "--compile-commands-dir=build" },
+   cmd = { "clangd", "--compile-commands-dir=build", "--clang-tidy", "--clang-tidy-checks=*" },
    filetypes = { "c", "cpp", "objc", "objcpp" },
    on_attach = on_attach,
    capabilities = capabilities,
