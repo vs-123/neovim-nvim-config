@@ -51,8 +51,7 @@ vim.o.timeout = true
 vim.o.timeoutlen = 0
 vim.o.belloff = "all"
 
-vim.o.completeopt = "menuone,noinsert,noselect"
-vim.g.asyncomplete_auto_popup = 0
+vim.o.omnifunc = ""
 
 ------------------------------------------------------------
 -- Keymap Settings
@@ -136,8 +135,44 @@ require("lazy").setup({
       },
    },
    { "folke/which-key.nvim" },
-   -- { "Issafalcon/lsp_signature.nvim", lazy = true }
+   {
+      "hrsh7th/nvim-cmp",
+      dependencies = {
+         "hrsh7th/cmp-nvim-lsp",
+         "hrsh7th/cmp-buffer",
+         "hrsh7th/cmp-path",
+         "hrsh7th/cmp-cmdline",
+         "L3MON4D3/LuaSnip",
+         "saadparwaiz1/cmp_luasnip",
+      },
+   },
+   { "hrsh7th/cmp-nvim-lsp-signature-help" },
 })
+
+------------------------------------------------------------
+-- nvim-cmp
+------------------------------------------------------------
+local cmp = require("cmp")
+
+cmp.setup({
+   completion = { autocomplete = false },
+   mapping = cmp.mapping.preset.insert({
+      ["<C-y>"] = cmp.mapping.complete(),
+      ["<CR>"] = cmp.mapping.confirm({ select = true }),
+      ["<C-n>"] = cmp.mapping.select_next_item(),
+      ["<C-p>"] = cmp.mapping.select_prev_item(),
+   }),
+   sources = cmp.config.sources({
+      { name = "nvim_lsp" },
+      { name = "nvim_lsp_signature_help" },
+      { name = "buffer" },
+      { name = "path" },
+      { name = "luasnip" },
+   }),
+})
+
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
 ------------------------------------------------------------
 -- LSP
@@ -177,6 +212,7 @@ local clangd_base = {
    cmd = { "clangd", "--compile-commands-dir=build" },
    filetypes = { "c", "cpp", "objc", "objcpp" },
    on_attach = on_attach,
+   capabilities = capabilities,
 }
 
 -- Start clangd per buffer with my root_dir
@@ -188,7 +224,6 @@ vim.api.nvim_create_autocmd("FileType", {
          root_dir = compute_root_dir(bufnr),
       })
       vim.lsp.start(cfg)
-      vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
    end,
 })
 
@@ -198,7 +233,6 @@ vim.diagnostic.config({
    signs = true,
    float = { border = "rounded" },
 })
-
 
 ------------------------------------------------------------
 -- Lua LSP (for Neovim config only)
@@ -234,6 +268,7 @@ local lua_ls_base = {
          telemetry = { enable = false },
       },
    },
+   capabilities = capabilities,
 }
 
 vim.api.nvim_create_autocmd("FileType", {
