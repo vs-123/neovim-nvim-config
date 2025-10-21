@@ -52,6 +52,7 @@ vim.o.timeoutlen = 0
 vim.o.belloff = "all"
 
 vim.o.omnifunc = ""
+vim.o.linebreak = true
 
 ------------------------------------------------------------
 -- Keymap Settings
@@ -70,21 +71,25 @@ local function TogglePaste()
 end
 
 vim.g.mapleader = ' '
-vim.keymap.set("n", "<leader>n", ":tabnew<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>h", ":tabprevious<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>l", ":tabnext<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>H", ":tabm-1<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>L", ":tabm+1<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>q", ":tabclose<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>n", ":tabnew<CR>", { noremap = true, silent = true, desc = "Create new tab" })
+vim.keymap.set("n", "<leader>h", ":tabprevious<CR>", { noremap = true, silent = true, desc = "Go to previous tab" })
+vim.keymap.set("n", "<leader>l", ":tabnext<CR>", { noremap = true, silent = true, desc = "Go to next tab" })
+vim.keymap.set("n", "<leader>H", ":tabm-1<CR>", { noremap = true, silent = true, desc = "Move tab to the left" })
+vim.keymap.set("n", "<leader>L", ":tabm+1<CR>", { noremap = true, silent = true, desc = "Move tab to the right" })
+vim.keymap.set("n", "<leader>q", ":tabclose<CR>", { noremap = true, silent = true, desc = "Close tab" })
 
-vim.keymap.set("n", "<leader>t", ":term<CR>", { noremap = true, silent = true })
-vim.keymap.set("t", "<esc>", "<C-\\><C-n>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>t", ":term<CR>", { noremap = true, silent = true, desc = "Open terminal" })
+vim.keymap.set("t", "<esc>", "<C-\\><C-n>", { noremap = true, silent = true, desc = "Normal mode in terminal" })
 
-vim.keymap.set("n", "<leader>e", ":NERDTreeToggle<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>r", ":NERDTreeMirror<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>E", ":NERDTreeToggle %:h<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>e", ":NERDTreeToggle<CR>", { noremap = true, silent = true, desc = "Toggle NERDTree" })
+vim.keymap.set("n", "<leader>r", ":NERDTreeMirror<CR>", { noremap = true, silent = true, desc = "Mirror NERDTree" })
+vim.keymap.set("n", "<leader>E", ":NERDTreeToggle %:h<CR>", { noremap = true, silent = true, desc = "Toggle NERDTree for a file's location" })
 
-vim.keymap.set("n", "<leader>p", TogglePaste, { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>p", TogglePaste, { noremap = true, silent = true, desc = "Toggle Paste" })
+
+vim.keymap.set("n", "<leader>ff", function()
+   vim.lsp.buf.format({ async = true })
+end, { noremap = true, silent = true, desc = "Format Buffer using LSP" })
 
 vim.keymap.set('n', '<leader>yp', function()
    local path = vim.fn.expand('%:p')
@@ -180,14 +185,13 @@ capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 local lsp_util = require("lspconfig.util")
 
 local on_attach = function(client, bufnr)
-   local opts = { buffer = bufnr, silent = true }
-   vim.keymap.set("n", "<leader>k", vim.lsp.buf.hover, opts)
-   vim.keymap.set("n", "<leader>K", vim.diagnostic.open_float, opts)
-   vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-   vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-   vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, opts)
-   vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, opts)
-   vim.keymap.set("n", "<leader>d", vim.diagnostic.setloclist, opts)
+   vim.keymap.set("n", "<leader>k", vim.lsp.buf.hover, { buffer = bufnr, silent = true, desc = "LSP Hover" })
+   vim.keymap.set("n", "<leader>K", vim.diagnostic.open_float, { buffer = bufnr, silent = true, desc = "LSP Line Diagnostic" })
+   vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { buffer = bufnr, silent = true, desc = "LSP Rename" })
+   vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { buffer = bufnr, silent = true, desc = "LSP Code Actions" })
+   vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, { buffer = bufnr, silent = true, desc = "LSP Goto Definition" })
+   vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, { buffer = bufnr, silent = true, desc = "LSP Peek References" })
+   vim.keymap.set("n", "<leader>d", vim.diagnostic.setloclist, { buffer = bufnr, silent = true, desc = "LSP List All Diagnostics" })
    -- vim.keymap.del("i", "<C-s>")
    pcall(vim.keymap.del, "i", "<C-s>")
    require("lsp_signature").setup({
