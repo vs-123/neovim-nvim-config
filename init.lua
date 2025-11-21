@@ -50,9 +50,9 @@ vim.o.hlsearch = true
 vim.o.timeout = true
 vim.o.timeoutlen = 0
 vim.o.belloff = "all"
+vim.o.virtualedit = "all"
 
 vim.o.omnifunc = ""
-vim.o.linebreak = true
 
 ------------------------------------------------------------
 -- Keymap Settings
@@ -193,7 +193,7 @@ local on_attach = function(client, bufnr)
    vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { buffer = bufnr, silent = true, desc = "LSP Code Actions" })
    vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, { buffer = bufnr, silent = true, desc = "LSP Goto Definition" })
    vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, { buffer = bufnr, silent = true, desc = "LSP Peek References" })
-   vim.keymap.set("n", "<leader>d", vim.diagnostic.setloclist, { buffer = bufnr, silent = true, desc = "LSP List All Diagnostics" })
+   vim.keymap.set("n", "<leader>ga", vim.diagnostic.setloclist, { buffer = bufnr, silent = true, desc = "LSP List All Diagnostics" })
    -- vim.keymap.del("i", "<C-s>")
    pcall(vim.keymap.del, "i", "<C-s>")
    require("lsp_signature").setup({
